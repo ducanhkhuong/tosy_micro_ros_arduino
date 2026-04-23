@@ -10,25 +10,44 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      # 1. Checkout đúng branch của bạn
+      - name: Checkout code
+        uses: actions/checkout@v4
         with:
           ref: tosy_foxy
 
+      # 2. Lấy thời gian (fix deprecated set-output)
       - name: Get date
         id: date
         run: echo "date=$(date +'%d-%m-%Y %H:%M')" >> $GITHUB_OUTPUT
 
+      # 3. Fix lỗi CRLF + permission (QUAN TRỌNG)
+      - name: Prepare script
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y dos2unix
+          dos2unix extras/library_generation/library_generation.sh
+          chmod +x extras/library_generation/library_generation.sh
+
+      # 4. Chạy Docker build micro-ROS
       - name: Update libraries
         run: |
-          docker run --rm -v $(pwd):/project --env MICROROS_LIBRARY_FOLDER=extras microros/micro_ros_static_library_builder:foxy
+          docker run --rm \
+            -v $(pwd):/project \
+            --env MICROROS_LIBRARY_FOLDER=extras \
+            microros/micro_ros_static_library_builder:foxy
+
+          # Fix quyền file sau khi docker chạy
           sudo chown -R $(whoami) .
           sudo chmod -R 777 .
 
+      # 5. Tạo Pull Request tự động
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v5
         with:
           commit-message: auto update ${{ steps.date.outputs.date }}
           title: auto update ${{ steps.date.outputs.date }}
+          body: Auto update micro-ROS library
           branch: autoupdate_tosy_foxy
           delete-branch: true
           base: tosy_foxy

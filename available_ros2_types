@@ -216,6 +216,7 @@ tf2_msgs/FrameGraph.srv
 tf2_msgs/LookupTransform.action
 tf2_msgs/TF2Error.msg
 tf2_msgs/TFMessage.msg
+tosy_robot_msgs/JointAngle.msg
 tosy_robot_msgs/WheelState.msg
 trajectory_msgs/JointTrajectory.msg
 trajectory_msgs/JointTrajectoryPoint.msg

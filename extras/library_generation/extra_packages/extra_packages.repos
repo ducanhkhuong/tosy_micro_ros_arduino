@@ -8,3 +8,8 @@ repositories:
     type: git
     url: https://github.com/ducanhkhuong/tosy_robot_msgs
     version: tosy
+
+  tosy_robot_srv:
+    type: git
+    url: https://github.com/ducanhkhuong/tosy_robot_srv
+    version: tosy

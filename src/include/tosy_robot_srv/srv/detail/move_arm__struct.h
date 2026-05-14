@@ -25,6 +25,7 @@ extern "C"
 typedef struct tosy_robot_srv__srv__MoveArm_Request
 {
   geometry_msgs__msg__Pose target_pose;
+  int64_t time;
 } tosy_robot_srv__srv__MoveArm_Request;
 
 // Struct for a sequence of tosy_robot_srv__srv__MoveArm_Request.
